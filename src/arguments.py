@@ -6,10 +6,6 @@
 #
 
 import argparse
-import time
-import os
-import sys
-
 
 def get_arg_parser(title):
 	parser = argparse.ArgumentParser(description=title)
@@ -19,6 +15,7 @@ def get_arg_parser(title):
 	parser.add_argument('--input_format', type=str, default='DAG', choices=['seq', 'DAG'])
 	parser.add_argument('--max_eval_size', type=int, default=1000)
 	parser.add_argument('--load_model', type=str, default=None)
+	parser.add_argument('--resume', type=int, default=0)
 	parser.add_argument('--processes', type=int, default=1)
 	parser.add_argument('--train_proportion', type=float, default=1.0)
 
@@ -35,7 +32,7 @@ def get_arg_parser(title):
 	parser.add_argument('--keep_last_n', type=int, default=None)
 	parser.add_argument('--eval_every_n', type=int, default=100)
 	parser.add_argument('--log_interval', type=int, default=100)
-	parser.add_argument('--log_name', type=str, default='../logs/model_0.csv')
+	parser.add_argument('--log_name', type=str, default='model_0.csv')
 
 	data_group = parser.add_argument_group('data')
 	if title == 'Halide':
@@ -92,5 +89,5 @@ def get_arg_parser(title):
 	train_group.add_argument('--gradient_clip', type=float, default=5.0)
 	train_group.add_argument('--num_epochs', type=int, default=10)
 	train_group.add_argument('--dropout_rate', type=float, default=0.0)
-	
+
 	return parser
