@@ -20,9 +20,11 @@ class Logger(object):
 	"""
 	def __init__(self, args):
 		self.log_interval = args.log_interval
-		self.log_name = args.log_name
+		self.log_name = "../logs/" + args.log_name
 		self.best_reward = 0
 		self.records = []
+		if not os.path.exists("../logs/"):
+			os.makedirs("../logs/")
 
 
 	def write_summary(self, summary):
@@ -31,4 +33,3 @@ class Logger(object):
 		df = pd.DataFrame(self.records)
 		df.to_csv(self.log_name, index=False)
 		self.best_reward = max(self.best_reward, summary['avg_reward'])
-		

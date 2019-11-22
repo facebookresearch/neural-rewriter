@@ -28,7 +28,7 @@ from models.jspModel import jspModel
 def create_model(args, term_vocab=None, term_vocab_list=None, op_vocab=None, op_vocab_list=None):
 	args.embedding_size = args.num_res * (args.max_job_len + 1) + 1
 	model = jspModel(args)
-	
+
 	if model.cuda_flag:
 		model = model.cuda()
 	model.share_memory()
@@ -43,7 +43,7 @@ def create_model(args, term_vocab=None, term_vocab_list=None, op_vocab=None, op_
 
 def train(args):
 	print('Training:')
-	
+
 	train_data = data_utils.load_dataset(args.train_dataset, args)
 	train_data_size = len(train_data)
 	if args.train_proportion < 1.0:
@@ -52,7 +52,7 @@ def train(args):
 		train_data = train_data[:train_data_size]
 
 	eval_data = data_utils.load_dataset(args.val_dataset, args)
-	
+
 	DataProcessor = data_utils.jspDataProcessor(args)
 	model_supervisor = create_model(args)
 
@@ -89,7 +89,7 @@ def evaluate(args):
 	dataProcessor = data_utils.jspDataProcessor(args)
 	model_supervisor = create_model(args)
 	test_loss, test_reward = model_supervisor.eval(test_data, args.output_trace_flag)
-	
+
 
 	print('test loss: %.4f test reward: %.4f' % (test_loss, test_reward))
 
@@ -104,4 +104,3 @@ if __name__ == "__main__":
 		evaluate(args)
 	else:
 		train(args)
-

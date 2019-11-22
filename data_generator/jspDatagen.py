@@ -11,10 +11,10 @@ import argparse
 import json
 
 argParser = argparse.ArgumentParser()
-argParser.add_argument('--res_file', type=str, default='../data/jsp/jsp_r10.json')
-argParser.add_argument('--res_train_file', type=str, default='../data/jsp/jsp_r10_train.json')
-argParser.add_argument('--res_val_file', type=str, default='../data/jsp/jsp_r10_val.json')
-argParser.add_argument('--res_test_file', type=str, default='../data/jsp/jsp_r10_test.json')
+argParser.add_argument('--res_file', type=str, default='jsp_r10.json')
+argParser.add_argument('--res_train_file', type=str, default='jsp_r10_train.json')
+argParser.add_argument('--res_val_file', type=str, default='jsp_r10_val.json')
+argParser.add_argument('--res_test_file', type=str, default='jsp_r10_test.json')
 
 argParser.add_argument('--num_samples', type=int, default=100000)
 argParser.add_argument('--seed', type=int, default=None)
@@ -80,20 +80,24 @@ def main():
 					cur_sample.append({'start_time': i, 'job_len': cur_job_len, 'resource_size': list(cur_resource_size)})
 		samples.append(cur_sample)
 
+	path = '../data/jsp/'
+	if not os.path.exists(path):
+		os.makedirs(path)
+
 	data_size = len(samples)
 	print(data_size)
-	fout_res = open(args.res_file, 'w')
+	fout_res = open(path+args.res_file, 'w')
 	json.dump(samples, fout_res)
 
-	fout_train = open(args.res_train_file, 'w')
+	fout_train = open(path+args.res_train_file, 'w')
 	train_data_size = int(data_size * 0.8)
 	json.dump(samples[:train_data_size], fout_train)
 
-	fout_val = open(args.res_val_file, 'w')
+	fout_val = open(path+args.res_val_file, 'w')
 	val_data_size = int(data_size * 0.9) - train_data_size
 	json.dump(samples[train_data_size: train_data_size + val_data_size], fout_val)
 
-	fout_test = open(args.res_test_file, 'w')
+	fout_test = open(path+args.res_test_file, 'w')
 	test_data_size = data_size - train_data_size - val_data_size
 	json.dump(samples[train_data_size + val_data_size:], fout_test)
 
