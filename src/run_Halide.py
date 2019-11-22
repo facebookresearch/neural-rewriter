@@ -84,7 +84,7 @@ def train(args):
 				logger.write_summary(val_summary)
 				model_supervisor.save_model()
 
-			if args.lr_decay_steps is not None and (args.resume + model_supervisor.global_step) % args.lr_decay_steps == 0:
+			if args.lr_decay_steps and (args.resume + model_supervisor.global_step) % args.lr_decay_steps == 0:
 				model_supervisor.model.lr_decay(args.lr_decay_rate)
 				if model_supervisor.model.cont_prob > 0.01:
 					model_supervisor.model.cont_prob *= 0.5
