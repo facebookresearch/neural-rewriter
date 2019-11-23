@@ -71,13 +71,13 @@ def train(args):
 			train_loss, train_reward = model_supervisor.train(batch_data)
 			print('train loss: %.4f train reward: %.4f' % (train_loss, train_reward))
 
-			if (args.resume + model_supervisor.global_step) % args.eval_every_n == 0:
+			if model_supervisor.global_step % args.eval_every_n == 0:
 				eval_loss, eval_reward = model_supervisor.eval(eval_data, args.output_trace_flag, args.max_eval_size)
-				val_summary = {'avg_reward': eval_reward, 'global_step': args.resume + model_supervisor.global_step}
+				val_summary = {'avg_reward': eval_reward, 'global_step': model_supervisor.global_step}
 				logger.write_summary(val_summary)
 				model_supervisor.save_model()
 
-			if args.lr_decay_steps and (args.resume + model_supervisor.global_step) % args.lr_decay_steps == 0:
+			if args.lr_decay_steps and model_supervisor.global_step % args.lr_decay_steps == 0:
 				model_supervisor.model.lr_decay(args.lr_decay_rate)
 				if model_supervisor.model.cont_prob > 0.01:
 					model_supervisor.model.cont_prob *= 0.5
