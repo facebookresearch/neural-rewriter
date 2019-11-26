@@ -13,9 +13,9 @@ import json
 import time
 
 argParser = argparse.ArgumentParser()
-argParser.add_argument('--input_file', type=str, default='../data/jsp/jsp_r20_test.json')
+argParser.add_argument('--input_file', type=str, default='../data/jsp/jsp_r10_test.json')
 argParser.add_argument('--alg', type=str, default='SJF', choices=['random', 'EJF', 'SJF', 'offline'])
-argParser.add_argument('--num_res', type=int, default=20)
+argParser.add_argument('--num_res', type=int, default=10)
 argParser.add_argument('--job_horizon', type=int, default=10)
 argParser.add_argument('--max_resource_size', type=int, default=10)
 argParser.add_argument('--max_time_horizon', type=int, default=1000)
@@ -187,7 +187,7 @@ def calc_reward(res):
 		avg_completion_time += cur_completion_time
 	avg_slow_down /= len(res)
 	avg_completion_time /= len(res)
-	return avg_slow_down, avg_completion_time	
+	return avg_slow_down, avg_completion_time
 
 
 if __name__ == "__main__":
@@ -208,7 +208,7 @@ if __name__ == "__main__":
 		avg_slow_down += cur_avg_slow_down
 		avg_completion_time += cur_avg_completion_time
 		print('sample %d slow down: %.4f completion time: %.4f' % (i, cur_avg_slow_down, cur_avg_completion_time))
-	
+
 	avg_slow_down /= len(samples)
 	avg_completion_time /= len(samples)
 	print('average slow down: %.4f average completion time: %.4f' % (avg_slow_down, avg_completion_time))
