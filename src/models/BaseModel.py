@@ -31,7 +31,11 @@ class BaseModel(nn.Module):
 		self.MLP_hidden_size = args.MLP_hidden_size
 		self.num_MLP_layers = args.num_MLP_layers
 		self.gradient_clip = args.gradient_clip
-		self.lr = args.lr
+		if args.lr_decay_steps and args.resume:
+			self.lr = args.lr * args.lr_decay_rate ** ((args.resume - 1) // args.lr_decay_steps)
+		else:
+			self.lr = args.lr
+		print('Current learning rate is {}.'.format(self.lr))
 		self.dropout_rate = args.dropout_rate
 		self.max_reduce_steps = args.max_reduce_steps
 		self.num_sample_rewrite_pos = args.num_sample_rewrite_pos
@@ -40,7 +44,7 @@ class BaseModel(nn.Module):
 		self.gamma = args.gamma
 		self.cont_prob = args.cont_prob
 		self.cuda_flag = args.cuda
-		
+
 
 	def init_weights(self, param_init):
 		for param in self.parameters():
@@ -49,6 +53,7 @@ class BaseModel(nn.Module):
 
 	def lr_decay(self, lr_decay_rate):
 		self.lr *= lr_decay_rate
+		print('Current learning rate is {}.'.format(self.lr))
 		for param_group in self.optimizer.param_groups:
 			param_group['lr'] = self.lr
 
@@ -57,4 +62,3 @@ class BaseModel(nn.Module):
 		if self.gradient_clip > 0:
 			clip_grad_norm(self.parameters(), self.gradient_clip)
 		self.optimizer.step()
-

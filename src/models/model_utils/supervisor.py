@@ -32,7 +32,7 @@ class Supervisor(object):
 		self.model = model
 		self.keep_last_n = args.keep_last_n
 		self.dropout_rate = args.dropout_rate
-		self.global_step = 0
+		self.global_step = args.resume
 		self.batch_size = args.batch_size
 		self.model_dir = args.model_dir
 
@@ -196,7 +196,7 @@ class jspSupervisor(Supervisor):
 		super(jspSupervisor, self).__init__(model, args)
 		self.DataProcessor = data_utils.jspDataProcessor(args)
 
-		
+
 	def train(self, batch_data):
 		self.model.dropout_rate = self.dropout_rate
 		self.model.optimizer.zero_grad()
